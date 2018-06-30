@@ -7,3 +7,9 @@ export const fetchAlbums = () => {
     url: 'https://jsonplaceholder.typicode.com/albums'
   })).pipe(map(data => data))
 }
+
+export const fetchAlbumById = (id) => {
+  return from(BaseService.request({
+    url: `https://jsonplaceholder.typicode.com/albums/${id}`
+  })).pipe(map(data => data))
+}
