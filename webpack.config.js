@@ -8,25 +8,40 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 })
 
 module.exports = {
+  mode: 'development',
   devtool: 'source-map',
-  entry: './client/index.js',
+  entry: ['babel-polyfill', './client/index.js'],
   output: {
     path: path.resolve('dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/'
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react'],
+          presets: [ 'react',
+            ['env', {
+              'targets': {
+                'browsers': ['last 2 versions']
+              }
+            }]],
           plugins: ['transform-decorators-legacy', 'transform-class-properties']
         }
       },
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   plugins: [HtmlWebpackPluginConfig]
 }
